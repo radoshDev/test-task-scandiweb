@@ -2,17 +2,18 @@ import { Component, ReactNode } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import { getNavigationData } from "../../../api"
 import { setCurrency } from "../../../app/slices/shopSlice"
-import { RootState } from "../../../app/store"
+import { RootState } from "../../../types/storeTypes"
 import Menu from "./Menu"
 
 type Props = ConnectedProps<typeof connector>
 
 class MenuContainer extends Component<Props> {
 	async componentDidMount(): Promise<void> {
-		const { fetchNavigationData, dispatchCurrency } = this.props
+		const { fetchNavigationData, dispatchCurrency, selectedCurrency } =
+			this.props
 		const response = await fetchNavigationData()
 
-		if (response.data) {
+		if (response.data && !selectedCurrency) {
 			const { currencies } = response.data
 			dispatchCurrency(currencies[0])
 		}
@@ -36,6 +37,7 @@ class MenuContainer extends Component<Props> {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const mapState = (state: RootState) => ({
 	navigationDataResponse: getNavigationData.select()(state),
+	selectedCurrency: state.shop.currency,
 })
 
 const mapDispatch = {

@@ -106,6 +106,8 @@
 		],
 		"unicorn/prevent-abbreviations": "off",
 		"unicorn/prefer-query-selector": "off",
+		"unicorn/prefer-object-from-entries": "off",
+		"unicorn/no-array-reduce": "off",
 		"unicorn/no-null": "off"
 	},
 	"settings": {

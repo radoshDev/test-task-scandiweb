@@ -1,10 +1,9 @@
 import { Component, ReactNode } from "react"
 import { Route, Routes } from "react-router-dom"
-import { CATEGORY_PARAM_KEY } from "../constants"
-import Cart from "../pages/Cart"
-import Category from "../pages/Category"
-import Home from "../pages/Home"
-import Product from "../pages/Product"
+import { CATEGORY_PARAM_KEY, PRODUCT_PARAM_KEY } from "../constants"
+import CartPage from "../pages/CartPage"
+import CategoryPage from "../pages/CategoryPage"
+import ProductPage from "../pages/ProductPage"
 import { Layout } from "./Layout"
 
 class App extends Component {
@@ -12,13 +11,16 @@ class App extends Component {
 		return (
 			<Layout>
 				<Routes>
-					<Route path="/" element={<Category />} />
+					<Route path="/" element={<CategoryPage />} />
 					<Route
 						path={`/category/:${CATEGORY_PARAM_KEY}`}
-						element={<Category />}
+						element={<CategoryPage />}
 					/>
-					<Route path="/product/:id" element={<Product />} />
-					<Route path="/cart" element={<Cart />} />
+					<Route
+						path={`/product/:${PRODUCT_PARAM_KEY}`}
+						element={<ProductPage />}
+					/>
+					<Route path="/cart" element={<CartPage />} />
 				</Routes>
 			</Layout>
 		)

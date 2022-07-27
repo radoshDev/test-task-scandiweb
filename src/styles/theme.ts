@@ -10,6 +10,7 @@ const theme: Theme = {
 	fonts: {
 		raleway: "'Raleway', sans-serif",
 		roboto: "'Roboto', sans-serif",
+		robotoCondensed: "'Roboto Condensed', 'Roboto', sans-serif",
 	},
 }
 

@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import {
-	Category,
-	CategoriesResponse,
-	OneCategoryResponse,
-} from "../types/category"
+import { Category, OneCategoryResponse } from "../types/category"
 import { NavigationData, NavigationDataResponse } from "../types/navigationData"
-import { GET_NAVIGATION_DATA, GET_ONE_CATEGORY } from "./queries"
+import { Product, ProductResponse } from "../types/product"
+import {
+	GET_NAVIGATION_DATA,
+	GET_ONE_CATEGORY,
+	GET_ONE_PRODUCT,
+} from "./queries"
 
 const baseUrl = "http://localhost:4000"
 
@@ -36,10 +37,22 @@ export const api = createApi({
 				method: "POST",
 				body: { query: GET_ONE_CATEGORY(categoryName) },
 			}),
-			transformResponse: (response: OneCategoryResponse) =>
-				response.data.category,
+			transformResponse: (response: OneCategoryResponse) => {
+				const sortedProducts = response.data.category.products.sort((a, b) =>
+					a.name > b.name ? 1 : -1
+				)
+				return { ...response.data.category, products: sortedProducts }
+			},
+		}),
+		getProduct: builder.query<Product, string>({
+			query: id => ({
+				url: "",
+				method: "POST",
+				body: { query: GET_ONE_PRODUCT(id) },
+			}),
+			transformResponse: (response: ProductResponse) => response.data.product,
 		}),
 	}),
 })
 
-export const { getNavigationData, getCategory } = api.endpoints
+export const { getNavigationData, getCategory, getProduct } = api.endpoints

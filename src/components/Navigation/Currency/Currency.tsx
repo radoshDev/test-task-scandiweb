@@ -1,7 +1,7 @@
 import { Component, createRef, ReactNode, RefObject } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import styled from "styled-components/macro"
-import { RootState } from "../../../app/store"
+import { RootState } from "../../../types/storeTypes"
 import CurrencyDropdown from "./CurrencyDropdown"
 
 const S = {

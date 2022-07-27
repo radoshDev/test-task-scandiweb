@@ -1,5 +1,9 @@
 import { Component, ReactNode } from "react"
+import { connect, ConnectedProps } from "react-redux"
 import styled from "styled-components/macro"
+import { toggleShowCart } from "../../../app/slices/shopSlice"
+import { RootState } from "../../../types/storeTypes"
+import { calcCartQty } from "../../../utils/calcCartQty"
 import CartButton from "./CartButton"
 import CartPopup from "./CartPopup/CartPopup"
 
@@ -9,37 +13,38 @@ const S = {
 	`,
 }
 
-type State = {
-	isModal: boolean
-}
+type Props = ConnectedProps<typeof connector>
 
-type Props = Record<string, unknown>
-
-class Cart extends Component<Props, State> {
-	constructor(props: Props) {
-		super(props)
-		this.state = {
-			isModal: false,
-		}
-	}
-
-	openModal = (): void => {
-		this.setState({ isModal: true })
-	}
-
-	closeModal = (): void => {
-		this.setState({ isModal: false })
-	}
-
+class Cart extends Component<Props> {
 	render(): ReactNode {
-		const { isModal } = this.state
+		const { isShowCart, cartProductsCount, toggleCartModal } = this.props
 		return (
 			<S.Cart>
-				<CartButton onClick={this.openModal} />
-				{isModal && <CartPopup handleClose={this.closeModal} />}
+				<CartButton
+					cartProductsCount={cartProductsCount}
+					handleOpenCart={() => toggleCartModal()}
+				/>
+				{isShowCart && (
+					<CartPopup
+						handleClose={() => toggleCartModal()}
+						cartProductsCount={cartProductsCount}
+					/>
+				)}
 			</S.Cart>
 		)
 	}
 }
 
-export default Cart
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const mapState = (state: RootState) => ({
+	isShowCart: state.shop.cart.isShow,
+	cartProductsCount: calcCartQty(state.shop.cart.products),
+})
+
+const mapDispatch = {
+	toggleCartModal: toggleShowCart,
+}
+
+const connector = connect(mapState, mapDispatch)
+
+export default connector(Cart)

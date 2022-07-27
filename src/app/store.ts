@@ -1,5 +1,6 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit"
 import { api } from "../api"
+import { localStorageMiddleware } from "../middleware/localStorageMiddleware"
 import shopSlice from "./slices/shopSlice"
 
 export const store = configureStore({
@@ -10,14 +11,6 @@ export const store = configureStore({
 	middleware: getDefaultMiddleware => [
 		...getDefaultMiddleware(),
 		api.middleware,
+		localStorageMiddleware,
 	],
 })
-
-export type AppDispatch = typeof store.dispatch
-export type RootState = ReturnType<typeof store.getState>
-export type AppThunk<ReturnType = void> = ThunkAction<
-	ReturnType,
-	RootState,
-	unknown,
-	Action<string>
->

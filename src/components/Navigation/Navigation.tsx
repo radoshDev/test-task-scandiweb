@@ -1,17 +1,21 @@
 import { Component, ReactNode } from "react"
 import styled from "styled-components/macro"
 import Container from "../../styles/Container"
-import CartContainer from "./Cart/CartContainer"
+import Cart from "./Cart/Cart"
 import Currency from "./Currency/Currency"
 import { Menu } from "./Menu"
 import NavigationLogo from "./NavigationLogo"
 
 const S = {
-	NavBar: styled.nav`
-		padding-top: 20px;
+	NavBar: styled.header`
+		padding: 20px 0 5px;
 		display: flex;
 		place-items: center;
-		position: relative;
+		position: sticky;
+		top: 0;
+		width: 100%;
+		background-color: #fff;
+		z-index: 10;
 		.navbar__wrapper {
 			display: flex;
 			justify-content: space-between;
@@ -34,7 +38,7 @@ class NavBar extends Component {
 					<NavigationLogo />
 					<div className="navbar__action">
 						<Currency />
-						<CartContainer />
+						<Cart />
 					</div>
 				</Container>
 			</S.NavBar>

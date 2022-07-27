@@ -7,7 +7,7 @@ import Preloader from "../../ui/Preloader"
 import ErrorAlert from "../../ui/ErrorAlert"
 
 const S = {
-	MenuWrapper: styled.div`
+	MenuWrapper: styled.nav`
 		align-self: flex-end;
 		.menu {
 			display: flex;

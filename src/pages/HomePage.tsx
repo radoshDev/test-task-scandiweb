@@ -9,9 +9,7 @@ class Home extends React.Component<Props> {
 		return (
 			<div>
 				<h1>Home Page</h1>;<p>{JSON.stringify(this.props)}</p>
-				<button
-					type="button"
-					onClick={() => navigate("/category/tech", { replace: true })}>
+				<button type="button" onClick={() => navigate("/category/tech")}>
 					Go to Tech
 				</button>
 			</div>

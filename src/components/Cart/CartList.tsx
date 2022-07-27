@@ -1,16 +1,12 @@
+import { nanoid } from "nanoid"
 import { Component, ReactNode } from "react"
-import styled from "styled-components"
+import styled from "styled-components/macro"
+import { Cart } from "../../types/storeTypes"
 import CartItem from "./CartItem"
 
 const S = {
 	CartList: styled.div`
-		max-height: 420px;
-		overflow-y: auto;
-		overflow-y: overlay;
-		display: flex;
-		flex-flow: column;
-		gap: 40px;
-		margin-bottom: 40px;
+		margin-bottom: 32px;
 		&::-webkit-scrollbar {
 			width: 0.5rem;
 		}
@@ -20,13 +16,23 @@ const S = {
 	`,
 }
 
-class CartList extends Component {
+type Props = {
+	cartProducts: Cart[]
+}
+
+class CartList extends Component<Props> {
 	render(): ReactNode {
+		const { cartProducts } = this.props
 		return (
-			<S.CartList>
-				<CartItem />
-				<CartItem />
-				<CartItem />
+			<S.CartList className="cart_list">
+				{cartProducts.map(({ options, productId, qty }) => (
+					<CartItem
+						key={nanoid(4)}
+						options={options}
+						productId={productId}
+						quantity={qty}
+					/>
+				))}
 			</S.CartList>
 		)
 	}

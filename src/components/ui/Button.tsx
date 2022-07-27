@@ -1,13 +1,16 @@
 import { Component, ReactNode, CSSProperties } from "react"
 import styled, { css } from "styled-components"
 
-type StyleProps = Pick<Props, "variant" | "width" | "height" | "isActive">
+type StyleProps = Pick<
+	Props,
+	"variant" | "width" | "height" | "isActive" | "disable"
+>
 
 const Outline = css<StyleProps>`
 	border: 1px solid ${p => p.theme.main.textColor};
 	color: ${p => p.theme.main.textColor};
 	background: transparent;
-	&.select {
+	&.text {
 		border: 1px solid ${p => p.theme.main.textColor};
 		background-color: ${p =>
 			p.isActive ? p.theme.main.textColor : "transparent"};
@@ -17,7 +20,8 @@ const Outline = css<StyleProps>`
 	}
 `
 const Contained = css<StyleProps>`
-	background: ${p => p.theme.main.color};
+	background: ${({ theme, disable }) => (!disable ? theme.main.color : "#666")};
+	cursor: ${p => (p.disable ? "default" : "pointer")};
 	border: none;
 	color: #fff;
 	&.color {
@@ -43,25 +47,38 @@ const S = {
 type Props = {
 	children: ReactNode
 	variant: "outline" | "contained"
+	disable?: boolean
 	isActive?: boolean
 	className?: string
 	style?: CSSProperties
 	width?: string
 	height?: string
+	onClick?: () => void
 }
 
 class Button extends Component<Props> {
 	render(): ReactNode {
-		const { children, className, variant, height, width, isActive, style } =
-			this.props
+		const {
+			children,
+			className,
+			variant,
+			disable,
+			height,
+			width,
+			isActive,
+			style,
+			onClick,
+		} = this.props
 		return (
 			<S.Button
-				isActive={isActive}
+				disable={disable}
 				variant={variant}
+				isActive={isActive}
 				className={className}
 				width={width}
 				height={height}
-				style={style}>
+				style={style}
+				onClick={onClick}>
 				{children}
 			</S.Button>
 		)

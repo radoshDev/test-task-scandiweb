@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react"
 import styled from "styled-components/macro"
-import CartIcon from "../../ui/CartIcon"
+import CartIcon from "../../ui/icons/CartIcon"
 
 const S = {
 	IconButton: styled.button`
@@ -41,17 +41,20 @@ const S = {
 }
 
 type Props = {
-	onClick: () => void
+	handleOpenCart: () => void
+	cartProductsCount: number
 }
 
 class CartButton extends Component<Props> {
 	render(): ReactNode {
-		const { onClick } = this.props
-		const cartItemsCount = 3
+		const { cartProductsCount, handleOpenCart } = this.props
+
 		return (
-			<S.IconButton onClick={onClick}>
+			<S.IconButton onClick={handleOpenCart}>
 				<CartIcon color="#43464E" />
-				<span className="badge">{cartItemsCount}</span>
+				{cartProductsCount > 0 && (
+					<span className="badge">{cartProductsCount}</span>
+				)}
 			</S.IconButton>
 		)
 	}

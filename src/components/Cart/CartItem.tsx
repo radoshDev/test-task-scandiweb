@@ -1,113 +1,71 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, ReactNode } from "react"
 import styled from "styled-components/macro"
-import Attribute from "../Attribute/Attribute"
-import Button from "../ui/Button"
-import productTest from "../../assets/product-d.png"
-
-type Props = Record<string, unknown>
-type State = { selectAttr: string }
+import { connect, ConnectedProps } from "react-redux"
+import { Cart, RootState } from "../../types/storeTypes"
+import { getProduct } from "../../api"
+import Preloader from "../ui/Preloader"
+import ErrorAlert from "../ui/ErrorAlert"
+import CartItemContent from "./CartItem/CartItemContent"
 
 const S = {
 	CartItem: styled.div`
 		display: flex;
-	`,
-	ProductInfo: styled.div`
-		flex: 1 1;
-		.product_name {
-			font-weight: 300;
-			line-height: 1.6;
-			margin-bottom: 5px;
+		gap: 24px;
+		padding: 24px 0;
+		border-top: 1px solid #e5e5e5;
+		&:last-child {
+			border-bottom: 1px solid #e5e5e5;
 		}
-		.price {
-			font-weight: 500;
-			line-height: 1.6;
-			margin-bottom: 8px;
-		}
-	`,
-
-	QtyAction: styled.div`
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-		.qty {
-			font-weight: 500;
-		}
-	`,
-	ProductImage: styled.div`
-		display: flex;
 	`,
 }
 
-class CartItem extends Component<Props, State> {
+type OwnProps = {
+	productId: Cart["productId"]
+	options: Cart["options"]
+	quantity: Cart["qty"]
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>
+
+class CartItem extends Component<Props> {
+	async componentDidMount(): Promise<void> {
+		const { productId, fetchProduct, productResponse } = this.props
+		if (!productResponse.data) {
+			await fetchProduct(productId)
+		}
+	}
+
 	render(): ReactNode {
+		const { options, quantity, productResponse, productId } = this.props
+		const { isLoading, data, error } = productResponse
+
 		return (
 			<S.CartItem className="cart_item">
-				<S.ProductInfo className="product_info">
-					<div className="product_name">Apollo Running Short</div>
-					<div className="price">$50.00</div>
-					<div className="product_attributes">
-						<Attribute name="Size" values={["XS", "S", "M", "L"]} />
-						<Attribute
-							name="Color"
-							values={[
-								{ att_value: "red", color: "red" },
-								{ att_value: "black", color: "black" },
-								{ att_value: "green", color: "green" },
-							]}
-						/>
-					</div>
-				</S.ProductInfo>
-				<S.QtyAction className="qty_action">
-					<Button variant="outline" className="btn">
-						<svg
-							viewBox="0 0 10 10"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg">
-							<line
-								x1="1"
-								x2="9"
-								y1="5"
-								y2="5"
-								strokeWidth="1"
-								stroke="#1D1F22"
-								strokeLinecap="round"
-							/>
-							<line
-								x1="5"
-								x2="5"
-								y1="1"
-								y2="9"
-								strokeWidth="1"
-								stroke="#1D1F22"
-								strokeLinecap="round"
-							/>
-						</svg>
-					</Button>
-					<span className="qty">1</span>
-					<Button variant="outline" className="btn">
-						<svg
-							viewBox="0 0 10 10"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg">
-							<line
-								x1="1"
-								x2="9"
-								y1="5"
-								y2="5"
-								strokeWidth="1"
-								stroke="#1D1F22"
-								strokeLinecap="round"
-							/>
-						</svg>
-					</Button>
-				</S.QtyAction>
-				<S.ProductImage className="product-image">
-					<img src={productTest} alt="product d" width={121} height={190} />
-				</S.ProductImage>
+				{data && (
+					<CartItemContent
+						productData={data}
+						productId={productId}
+						options={options}
+						quantity={quantity}
+					/>
+				)}
+				{isLoading && <Preloader />}
+				{error && <ErrorAlert message="Problem to load product" />}
 			</S.CartItem>
 		)
 	}
 }
 
-export default CartItem
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const mapState = (state: RootState, { productId }: OwnProps) => ({
+	productResponse: getProduct.select(productId)(state),
+})
+
+const mapDispatch = {
+	fetchProduct: getProduct.initiate,
+}
+
+const connector = connect(mapState, mapDispatch)
+
+export default connector(CartItem)

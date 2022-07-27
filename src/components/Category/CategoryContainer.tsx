@@ -2,13 +2,14 @@ import { Component, ReactNode, memo } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import { getCategory } from "../../api"
 import { setCategory } from "../../app/slices/shopSlice"
-import { RootState } from "../../app/store"
+import { RootState } from "../../types/storeTypes"
+import CategoryContent from "./CategoryContent"
 
 type OwnProps = { categoryName: string | undefined }
 
 type Props = OwnProps & ConnectedProps<typeof connector>
 
-class CategoryContentContainer extends Component<Props> {
+class CategoryContainer extends Component<Props> {
 	async componentDidMount(): Promise<void> {
 		const { fetchCategory, categoryName, setSelectedCategory } = this.props
 		const response = await fetchCategory(categoryName)
@@ -36,10 +37,16 @@ class CategoryContentContainer extends Component<Props> {
 
 	render(): ReactNode {
 		const { categoryResponse } = this.props
-		const { data, isLoading, isError } = categoryResponse
+		const { data, isLoading, isError, error } = categoryResponse
 		console.log("render")
-
-		return <div>{JSON.stringify(data)}</div>
+		return (
+			<CategoryContent
+				categoryData={data}
+				errorMessage={error && "Problem to load products"}
+				isError={isError}
+				isLoading={isLoading}
+			/>
+		)
 	}
 }
 
@@ -56,4 +63,4 @@ const mapDispatch = {
 
 const connector = connect(mapState, mapDispatch)
 
-export default memo(connector(CategoryContentContainer))
+export default memo(connector(CategoryContainer))

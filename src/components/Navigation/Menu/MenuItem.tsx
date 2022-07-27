@@ -2,7 +2,7 @@ import { Component, ReactNode } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import { Link } from "react-router-dom"
 import styled from "styled-components/macro"
-import { RootState } from "../../../app/store"
+import { RootState } from "../../../types/storeTypes"
 import { Category } from "../../../types/category"
 
 const S = {
@@ -27,9 +27,7 @@ class MenuItem extends Component<Props> {
 
 		return (
 			<S.MenuItem className={isActive ? "active" : ""}>
-				<Link to={`/category/${category.name}`} replace>
-					{category.name}
-				</Link>
+				<Link to={`/category/${category.name}`}>{category.name}</Link>
 			</S.MenuItem>
 		)
 	}

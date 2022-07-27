@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from "react-redux"
 import styled from "styled-components"
 import { getNavigationData } from "../../../api"
 import { setCurrency } from "../../../app/slices/shopSlice"
-import { RootState } from "../../../app/store"
+import { RootState } from "../../../types/storeTypes"
 import { Currency } from "../../../types/navigationData"
 
 const S = {

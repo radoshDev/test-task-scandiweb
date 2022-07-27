@@ -13,9 +13,7 @@ class Layout extends Component<Props> {
 		return (
 			<>
 				<GlobalStyles />
-				<header>
-					<Navigation />
-				</header>
+				<Navigation />
 				<main>
 					<Container>{children}</Container>
 				</main>

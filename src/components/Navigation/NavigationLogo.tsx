@@ -5,7 +5,7 @@ import logo from "../../assets/logo.svg"
 class NavigationLogo extends Component {
 	render(): ReactNode {
 		return (
-			<Link to="/" replace>
+			<Link to="/">
 				<img src={logo} alt="brand logo" width={31} height={30} />
 			</Link>
 		)
