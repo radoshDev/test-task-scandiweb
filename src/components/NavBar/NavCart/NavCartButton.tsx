@@ -3,7 +3,7 @@ import styled from "styled-components/macro"
 import CartIcon from "../../ui/icons/CartIcon"
 
 const S = {
-	IconButton: styled.button`
+	NavCartButton: styled.button`
 		background-color: transparent;
 		border-radius: 50%;
 		cursor: pointer;
@@ -45,19 +45,19 @@ type Props = {
 	cartProductsCount: number
 }
 
-class CartButton extends Component<Props> {
+class NavCartButton extends Component<Props> {
 	render(): ReactNode {
 		const { cartProductsCount, handleOpenCart } = this.props
 
 		return (
-			<S.IconButton onClick={handleOpenCart}>
+			<S.NavCartButton onClick={handleOpenCart}>
 				<CartIcon color="#43464E" />
 				{cartProductsCount > 0 && (
 					<span className="badge">{cartProductsCount}</span>
 				)}
-			</S.IconButton>
+			</S.NavCartButton>
 		)
 	}
 }
 
-export default CartButton
+export default NavCartButton

@@ -1,36 +1,36 @@
 import { Component, ReactNode } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import styled from "styled-components/macro"
-import { toggleShowCart } from "../../../app/slices/shopSlice"
+import { setIsShowCart } from "../../../app/slices/shopSlice"
 import { RootState } from "../../../types/storeTypes"
 import { calcCartQty } from "../../../utils/calcCartQty"
-import CartButton from "./CartButton"
 import CartPopup from "./CartPopup/CartPopup"
+import NavCartButton from "./NavCartButton"
 
 const S = {
-	Cart: styled.div`
+	NavCart: styled.div`
 		position: relative;
 	`,
 }
 
 type Props = ConnectedProps<typeof connector>
 
-class Cart extends Component<Props> {
+class NavCart extends Component<Props> {
 	render(): ReactNode {
-		const { isShowCart, cartProductsCount, toggleCartModal } = this.props
+		const { isShowCart, cartProductsCount, setIsShowCartModal } = this.props
 		return (
-			<S.Cart>
-				<CartButton
+			<S.NavCart>
+				<NavCartButton
 					cartProductsCount={cartProductsCount}
-					handleOpenCart={() => toggleCartModal()}
+					handleOpenCart={() => setIsShowCartModal(true)}
 				/>
 				{isShowCart && (
 					<CartPopup
-						handleClose={() => toggleCartModal()}
+						handleClose={() => setIsShowCartModal(false)}
 						cartProductsCount={cartProductsCount}
 					/>
 				)}
-			</S.Cart>
+			</S.NavCart>
 		)
 	}
 }
@@ -42,9 +42,9 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-	toggleCartModal: toggleShowCart,
+	setIsShowCartModal: setIsShowCart,
 }
 
 const connector = connect(mapState, mapDispatch)
 
-export default connector(Cart)
+export default connector(NavCart)

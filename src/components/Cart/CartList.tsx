@@ -2,7 +2,7 @@ import { nanoid } from "nanoid"
 import { Component, ReactNode } from "react"
 import styled from "styled-components/macro"
 import { Cart } from "../../types/storeTypes"
-import CartItem from "./CartItem"
+import { CartItem } from "./CartItem"
 
 const S = {
 	CartList: styled.div`

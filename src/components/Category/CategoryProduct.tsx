@@ -1,4 +1,4 @@
-import { Component, ReactNode } from "react"
+import { Component, ReactNode, memo } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import { Link } from "react-router-dom"
 import styled, { css } from "styled-components/macro"
@@ -135,4 +135,4 @@ const mapDispatch = {
 
 const connector = connect(mapState, mapDispatch)
 
-export default connector(CategoryProduct)
+export default memo(connector(CategoryProduct))

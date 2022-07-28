@@ -36,9 +36,13 @@ const S = {
 		}
 		.product_description {
 			font-family: ${p => p.theme.fonts.roboto};
+			font-size: 16px;
 			line-height: 1.6;
 			max-width: 292px;
 			margin-top: 40px;
+			& > * {
+				font-size: inherit;
+			}
 		}
 	`,
 }
@@ -116,7 +120,7 @@ class ProductInfo extends Component<Props, State> {
 					variant="contained"
 					width="292px"
 					height="52px"
-					disable={!inStock}>
+					disabled={!inStock}>
 					Add to Cart
 				</Button>
 

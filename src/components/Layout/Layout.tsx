@@ -1,7 +1,7 @@
 import { Component, ReactElement, ReactNode } from "react"
 import Container from "../../styles/Container"
 import GlobalStyles from "../../styles/GlobalStyles"
-import Navigation from "../Navigation/Navigation"
+import { NavBar } from "../NavBar"
 
 type Props = {
 	children: ReactElement
@@ -13,7 +13,7 @@ class Layout extends Component<Props> {
 		return (
 			<>
 				<GlobalStyles />
-				<Navigation />
+				<NavBar />
 				<main>
 					<Container>{children}</Container>
 				</main>

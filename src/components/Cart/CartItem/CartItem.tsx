@@ -2,11 +2,14 @@
 import { Component, ReactNode } from "react"
 import styled from "styled-components/macro"
 import { connect, ConnectedProps } from "react-redux"
-import { Cart, RootState } from "../../types/storeTypes"
-import { getProduct } from "../../api"
-import Preloader from "../ui/Preloader"
-import ErrorAlert from "../ui/ErrorAlert"
-import CartItemContent from "./CartItem/CartItemContent"
+import { Cart, RootState } from "../../../types/storeTypes"
+import { getProduct } from "../../../api"
+import Preloader from "../../ui/Preloader"
+import ErrorAlert from "../../ui/ErrorAlert"
+import CartItemInfo from "./CartItemInfo"
+import { updateCartQty } from "../../../app/slices/shopSlice"
+import CartItemQtyAction from "./CartItemQtyAction"
+import CartItemImage from "./CartItemImage"
 
 const S = {
 	CartItem: styled.div`
@@ -36,19 +39,30 @@ class CartItem extends Component<Props> {
 		}
 	}
 
+	handleUpdateCartQty = (newQty: number): void => {
+		const { dispatchUpdateCartQty, options, productId } = this.props
+		dispatchUpdateCartQty({ newQty, options, productId })
+	}
+
 	render(): ReactNode {
-		const { options, quantity, productResponse, productId } = this.props
+		const { options, quantity, productResponse, selectedCurrency } = this.props
 		const { isLoading, data, error } = productResponse
 
 		return (
 			<S.CartItem className="cart_item">
 				{data && (
-					<CartItemContent
-						productData={data}
-						productId={productId}
-						options={options}
-						quantity={quantity}
-					/>
+					<>
+						<CartItemInfo
+							productData={data}
+							options={options}
+							selectedCurrency={selectedCurrency}
+						/>
+						<CartItemQtyAction
+							updateCartQty={this.handleUpdateCartQty}
+							quantity={quantity}
+						/>
+						<CartItemImage gallery={data.gallery} productName={data.name} />
+					</>
 				)}
 				{isLoading && <Preloader />}
 				{error && <ErrorAlert message="Problem to load product" />}
@@ -60,10 +74,12 @@ class CartItem extends Component<Props> {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const mapState = (state: RootState, { productId }: OwnProps) => ({
 	productResponse: getProduct.select(productId)(state),
+	selectedCurrency: state.shop.currency,
 })
 
 const mapDispatch = {
 	fetchProduct: getProduct.initiate,
+	dispatchUpdateCartQty: updateCartQty,
 }
 
 const connector = connect(mapState, mapDispatch)

@@ -1,10 +1,13 @@
 import { Component, ReactNode } from "react"
 import styled from "styled-components/macro"
-import { Product as IProduct } from "../../types/product"
+import { connect, ConnectedProps } from "react-redux"
 import ProductInfo from "./ProductInfo"
 import ProductImages from "./ProductImages"
 import Preloader from "../ui/Preloader"
 import ErrorAlert from "../ui/ErrorAlert"
+import { RootState } from "../../types/storeTypes"
+import { getProduct } from "../../api"
+import { setCategory, setIsShowCart } from "../../app/slices/shopSlice"
 
 const S = {
 	Product: styled.div`
@@ -13,16 +16,43 @@ const S = {
 	`,
 }
 
-type Props = {
-	productData: IProduct | undefined
-	isLoading: boolean
-	isError: boolean
-	errorMessage?: string
+type OwnProps = {
+	productId: string
 }
 
+type Props = OwnProps & ConnectedProps<typeof connector>
+
 class Product extends Component<Props> {
+	async componentDidMount(): Promise<void> {
+		const {
+			fetchProduct,
+			productId,
+			setSelectedCategory,
+			selectedCategory,
+			setIsShowCartModal,
+			isShowCartModal,
+		} = this.props
+		if (isShowCartModal) {
+			setIsShowCartModal(false)
+		}
+		const response = await fetchProduct(productId)
+
+		if (response.data && response.data.category !== selectedCategory) {
+			setSelectedCategory(response.data.category)
+		}
+	}
+
+	componentDidUpdate(prevProps: Props): void {
+		const { productId, isShowCartModal, setIsShowCartModal } = this.props
+		if (prevProps.productId === productId) return
+		if (isShowCartModal) {
+			setIsShowCartModal(false)
+		}
+	}
+
 	render(): ReactNode {
-		const { isError, isLoading, productData, errorMessage } = this.props
+		const { productResponse } = this.props
+		const { data: productData, isLoading, error } = productResponse
 		return (
 			<>
 				{productData && (
@@ -35,10 +65,25 @@ class Product extends Component<Props> {
 					</S.Product>
 				)}
 				{isLoading && <Preloader />}
-				{isError && errorMessage && <ErrorAlert message={errorMessage} />}
+				{error && <ErrorAlert message="Problem to load products" />}
 			</>
 		)
 	}
 }
 
-export default Product
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const mapState = (state: RootState, { productId }: OwnProps) => ({
+	productResponse: getProduct.select(productId)(state),
+	selectedCategory: state.shop.category,
+	isShowCartModal: state.shop.cart.isShow,
+})
+
+const mapDispatch = {
+	fetchProduct: getProduct.initiate,
+	setSelectedCategory: setCategory,
+	setIsShowCartModal: setIsShowCart,
+}
+
+const connector = connect(mapState, mapDispatch)
+
+export default connector(Product)

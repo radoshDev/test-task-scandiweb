@@ -4,6 +4,7 @@ import styled from "styled-components"
 import CartList from "../components/Cart/CartList"
 import Button from "../components/ui/Button"
 import { TAX_PERCENT } from "../constants"
+import { RouterProps, withRouter } from "../hoc/withRouter"
 import { RootState } from "../types/storeTypes"
 import { calcCartQty } from "../utils/calcCartQty"
 import { calcTotalPrice } from "../utils/calcTotalPrice"
@@ -38,17 +39,34 @@ const S = {
 				}
 			}
 		}
+		.cart_message {
+			font-weight: 700;
+			font-size: 32px;
+		}
 	`,
 }
 
-type Props = ConnectedProps<typeof connector>
+type Props = RouterProps & ConnectedProps<typeof connector>
 
 class CartPage extends Component<Props> {
+	handleOrder = (): void => {
+		const { navigate } = this.props
+		navigate("/order")
+	}
+
 	render(): ReactNode {
 		const { cartProducts, selectedCurrency } = this.props
 		const totalPrice = calcTotalPrice(cartProducts, selectedCurrency?.label)
 		const taxPrice = ((Number(totalPrice) * TAX_PERCENT) / 100).toFixed(2)
 		const cartProductsCount = calcCartQty(cartProducts)
+
+		if (cartProducts.length === 0) {
+			return (
+				<S.CartPage>
+					<div className="cart_message">Your Cart is empty</div>
+				</S.CartPage>
+			)
+		}
 		return (
 			<S.CartPage>
 				<h1 className="cart_title">Cart</h1>
@@ -75,7 +93,12 @@ class CartPage extends Component<Props> {
 						</tr>
 					</tbody>
 				</table>
-				<Button variant="contained" width="279px" height="43px">
+				<Button
+					variant="contained"
+					width="279px"
+					height="43px"
+					onClick={this.handleOrder}
+					disabled={cartProducts.length === 0}>
 					Order
 				</Button>
 			</S.CartPage>
@@ -91,4 +114,4 @@ const mapState = (state: RootState) => ({
 
 const connector = connect(mapState)
 
-export default connector(CartPage)
+export default connector(withRouter(CartPage))

@@ -1,10 +1,10 @@
 import { Component, ReactNode } from "react"
 import styled from "styled-components/macro"
 import Container from "../../styles/Container"
-import Cart from "./Cart/Cart"
-import Currency from "./Currency/Currency"
+import { Currency } from "./Currency"
 import { Menu } from "./Menu"
-import NavigationLogo from "./NavigationLogo"
+import { NavCart } from "./NavCart"
+import NavigationLogo from "./NavLogo"
 
 const S = {
 	NavBar: styled.header`
@@ -38,7 +38,7 @@ class NavBar extends Component {
 					<NavigationLogo />
 					<div className="navbar__action">
 						<Currency />
-						<Cart />
+						<NavCart />
 					</div>
 				</Container>
 			</S.NavBar>

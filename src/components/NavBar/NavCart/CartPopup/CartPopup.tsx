@@ -62,6 +62,12 @@ class CartPopup extends Component<Props> {
 		navigate("/cart")
 	}
 
+	handleOrder = (): void => {
+		const { navigate, handleClose } = this.props
+		handleClose()
+		navigate("/order")
+	}
+
 	render(): ReactNode {
 		const { handleClose, cartProductsCount } = this.props
 		const isProductsInCart = cartProductsCount > 0
@@ -81,7 +87,11 @@ class CartPopup extends Component<Props> {
 										onClick={this.openCartPage}>
 										View Bag
 									</Button>
-									<Button variant="contained" width="140px" height="43px">
+									<Button
+										variant="contained"
+										width="140px"
+										height="43px"
+										onClick={this.handleOrder}>
 										Check Out
 									</Button>
 								</div>

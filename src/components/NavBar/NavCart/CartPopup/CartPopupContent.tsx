@@ -45,8 +45,8 @@ const S = {
 						font-size: 16px;
 						line-height: 1.6;
 						margin-bottom: 5px;
+						display: inline;
 						.product_brand {
-							display: inline;
 							font-weight: 300;
 						}
 						.product_name {

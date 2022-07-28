@@ -2,6 +2,7 @@ import { Component, createRef, ReactNode, RefObject } from "react"
 import { connect, ConnectedProps } from "react-redux"
 import styled from "styled-components/macro"
 import { RootState } from "../../../types/storeTypes"
+import DropDownIcon from "../../ui/icons/DropDownIcon"
 import CurrencyDropdown from "./CurrencyDropdown"
 
 const S = {
@@ -56,23 +57,7 @@ class Currency extends Component<Props, State> {
 					<span className="symbol" role="button">
 						{selectedCurrency?.symbol}
 					</span>
-					<span
-						className="arrow"
-						style={{
-							transform: isDropdown ? "rotateZ(0deg)" : "rotateZ(180deg)",
-						}}>
-						<svg
-							viewBox="0 0 8 4"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M1 3.5L4 0.5L7 3.5"
-								stroke="black"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-						</svg>
-					</span>
+					<DropDownIcon isActive={isDropdown} />
 				</button>
 				{isDropdown && (
 					<CurrencyDropdown

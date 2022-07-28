@@ -15,6 +15,7 @@ const initialState: ShopState = {
 		products: JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "[]"),
 		isShow: false,
 	},
+	productPerPage: 6,
 }
 
 const shopSlice = createSlice({
@@ -41,9 +42,6 @@ const shopSlice = createSlice({
 			}
 			state.cart.isShow = true
 		},
-		toggleShowCart: state => {
-			state.cart.isShow = !state.cart.isShow
-		},
 		updateCartQty: (state, action: PayloadAction<UpdateCartPayload>) => {
 			const { newQty, options, productId } = action.payload
 			const exactProduct = getExactProductInCart(
@@ -51,14 +49,19 @@ const shopSlice = createSlice({
 				productId,
 				options
 			)
-			if (newQty < 1 && exactProduct) {
+			if (!exactProduct) return
+			if (newQty < 1) {
 				const deleteIndex = state.cart.products.indexOf(exactProduct)
 				state.cart.products.splice(deleteIndex, 1)
-			} else if (exactProduct) {
-				exactProduct.qty = newQty
 			} else {
-				console.log("Product not found")
+				exactProduct.qty = newQty
 			}
+		},
+		cleanCart: state => {
+			state.cart.products = []
+		},
+		setIsShowCart: (state, action: PayloadAction<boolean>) => {
+			state.cart.isShow = action.payload
 		},
 	},
 })
@@ -67,7 +70,8 @@ export const {
 	setCategory,
 	setCurrency,
 	addToCart,
-	toggleShowCart,
 	updateCartQty,
+	cleanCart,
+	setIsShowCart,
 } = shopSlice.actions
 export default shopSlice.reducer

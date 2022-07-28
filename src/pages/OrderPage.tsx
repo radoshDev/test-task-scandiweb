@@ -1,18 +1,24 @@
 import { Component, ReactNode } from "react"
-import { ORDER_PARAM_KEY } from "../constants"
-import { RouterProps, withRouter } from "../hoc/withRouter"
+import { connect, ConnectedProps } from "react-redux"
+import { cleanCart } from "../app/slices/shopSlice"
 
-type Props = RouterProps
+type Props = ConnectedProps<typeof connector>
 
 class OrderPage extends Component<Props> {
+	componentDidMount(): void {
+		const { dispatch } = this.props
+		dispatch(cleanCart())
+	}
+
 	render(): ReactNode {
-		const { params } = this.props
 		return (
 			<div>
-				<h2>Your order #{params[ORDER_PARAM_KEY]}</h2>
+				<h2>This must be an order page, but designer did not provide it.</h2>
 			</div>
 		)
 	}
 }
 
-export default withRouter(OrderPage)
+const connector = connect()
+
+export default connector(OrderPage)

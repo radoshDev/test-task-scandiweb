@@ -1,5 +1,5 @@
 import { Component, ReactNode } from "react"
-import ProductContainer from "../components/Product/ProductContainer"
+import { Product } from "../components/Product"
 import { PRODUCT_PARAM_KEY } from "../constants"
 import { RouterProps, withRouter } from "../hoc/withRouter"
 
@@ -9,7 +9,7 @@ class ProductPage extends Component<Props> {
 	render(): ReactNode {
 		const { params } = this.props
 		const productId = params[PRODUCT_PARAM_KEY]
-		return productId && <ProductContainer productId={productId} />
+		return productId && <Product productId={productId} />
 	}
 }
 

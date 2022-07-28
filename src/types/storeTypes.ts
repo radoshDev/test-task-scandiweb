@@ -19,6 +19,7 @@ export type ShopState = {
 		products: Cart[]
 		isShow: boolean
 	}
+	productPerPage: number
 }
 
 export type AddToCartPayload = Omit<Cart, "qty">

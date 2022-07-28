@@ -1,13 +1,30 @@
 import { Component, ReactNode } from "react"
 import { connect, ConnectedProps } from "react-redux"
+import styled from "styled-components/macro"
 import { getNavigationData } from "../../../api"
 import { setCurrency } from "../../../app/slices/shopSlice"
 import { RootState } from "../../../types/storeTypes"
-import Menu from "./Menu"
+import ErrorAlert from "../../ui/ErrorAlert"
+import Preloader from "../../ui/Preloader"
+import MenuItem from "./MenuItem"
+
+const S = {
+	MenuWrapper: styled.nav`
+		align-self: flex-end;
+		.menu {
+			display: flex;
+			font-size: 16px;
+			font-weight: 600;
+			font-family: ${p => p.theme.fonts.raleway};
+			text-transform: uppercase;
+			line-height: 1.2;
+		}
+	`,
+}
 
 type Props = ConnectedProps<typeof connector>
 
-class MenuContainer extends Component<Props> {
+class Menu extends Component<Props> {
 	async componentDidMount(): Promise<void> {
 		const { fetchNavigationData, dispatchCurrency, selectedCurrency } =
 			this.props
@@ -21,15 +38,20 @@ class MenuContainer extends Component<Props> {
 
 	render(): ReactNode {
 		const { navigationDataResponse } = this.props
-		const { data, isLoading, isError, error } = navigationDataResponse
+		const { data, isLoading, isError } = navigationDataResponse
 
 		return (
-			<Menu
-				categories={data?.categories}
-				isError={isError}
-				isLoading={isLoading}
-				errorMessage={error && "Problem to load categories"}
-			/>
+			<S.MenuWrapper>
+				{data && (
+					<ul className="menu">
+						{data.categories.map(category => (
+							<MenuItem category={category} key={category.name} />
+						))}
+					</ul>
+				)}
+				{isLoading && <Preloader />}
+				{isError && <ErrorAlert message="Problem to load categories" />}
+			</S.MenuWrapper>
 		)
 	}
 }
@@ -47,4 +69,4 @@ const mapDispatch = {
 
 const connector = connect(mapState, mapDispatch)
 
-export default connector(MenuContainer)
+export default connector(Menu)

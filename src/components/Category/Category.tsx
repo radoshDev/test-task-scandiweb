@@ -9,7 +9,7 @@ type OwnProps = { categoryName: string | undefined }
 
 type Props = OwnProps & ConnectedProps<typeof connector>
 
-class CategoryContainer extends Component<Props> {
+class Category extends Component<Props> {
 	async componentDidMount(): Promise<void> {
 		const { fetchCategory, categoryName, setSelectedCategory } = this.props
 		const response = await fetchCategory(categoryName)
@@ -18,30 +18,34 @@ class CategoryContainer extends Component<Props> {
 		}
 	}
 
-	componentDidUpdate(prevProps: Props): void {
-		const { categoryName, fetchCategory, setSelectedCategory } = this.props
-		// const newCategoryName = categoryName || "all"
+	async componentDidUpdate(prevProps: Props): Promise<void> {
+		const {
+			categoryName,
+			fetchCategory,
+			setSelectedCategory,
+			selectedCategory,
+		} = this.props
+		if (categoryName === prevProps.categoryName) return
 
-		if (
-			categoryName !== prevProps.categoryName &&
-			categoryName !== prevProps.selectedCategory
-		) {
-			console.log("new fetch")
-
-			const { unsubscribe } = fetchCategory(categoryName)
-			if (categoryName) {
-				setSelectedCategory(categoryName)
-			}
+		const { data } = await fetchCategory(categoryName)
+		if (data && data.name !== selectedCategory) {
+			setSelectedCategory(data.name)
 		}
 	}
 
+	componentWillUnmount(): void {
+		const { setSelectedCategory } = this.props
+		setSelectedCategory("")
+	}
+
 	render(): ReactNode {
-		const { categoryResponse } = this.props
+		const { categoryResponse, productPerPage } = this.props
 		const { data, isLoading, isError, error } = categoryResponse
-		console.log("render")
+
 		return (
 			<CategoryContent
 				categoryData={data}
+				productPerPage={productPerPage}
 				errorMessage={error && "Problem to load products"}
 				isError={isError}
 				isLoading={isLoading}
@@ -54,6 +58,7 @@ class CategoryContainer extends Component<Props> {
 const mapState = (state: RootState, { categoryName }: OwnProps) => ({
 	categoryResponse: getCategory.select(categoryName)(state),
 	selectedCategory: state.shop.category,
+	productPerPage: state.shop.productPerPage,
 })
 
 const mapDispatch = {
@@ -63,4 +68,4 @@ const mapDispatch = {
 
 const connector = connect(mapState, mapDispatch)
 
-export default memo(connector(CategoryContainer))
+export default memo(connector(Category))

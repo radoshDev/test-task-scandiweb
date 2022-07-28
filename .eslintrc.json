@@ -73,6 +73,7 @@
 		"@typescript-eslint/no-floating-promises": 2,
 		"jsx-a11y/click-events-have-key-events": "off",
 		"jsx-a11y/anchor-is-valid": "off",
+		"jsx-a11y/control-has-associated-label": "off",
 		"import/extensions": [
 			"error",
 			{

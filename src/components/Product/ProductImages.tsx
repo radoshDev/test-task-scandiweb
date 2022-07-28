@@ -38,35 +38,40 @@ type Props = {
 }
 
 type State = {
-	showImage: string
+	imageIndex: number
 }
 
 class ProductImages extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props)
-		this.state = { showImage: props.gallery[0] }
+		this.state = { imageIndex: 0 }
 	}
 
-	setShowImage = (src: string): void => {
-		this.setState({ showImage: src })
+	setShowImage = (imageIndex: number): void => {
+		this.setState({ imageIndex })
 	}
 
 	render(): ReactNode {
 		const { gallery, productName } = this.props
-		const { showImage } = this.state
+		const { imageIndex } = this.state
 		return (
 			<S.ProductImages>
 				<div className="main_image">
-					<img src={showImage} alt={productName} width={610} height={511} />
+					<img
+						src={gallery[imageIndex]}
+						alt={productName}
+						width={610}
+						height={511}
+					/>
 				</div>
 				<ul className="thumbnails" role="menu">
-					{gallery.map(imgSource => (
+					{gallery.map((imgSource, index) => (
 						<li
 							className={`thumbnail_img ${
-								imgSource === showImage ? "active" : ""
+								imgSource === gallery[imageIndex] ? "active" : ""
 							}`}
 							role="menuitem"
-							onClick={() => this.setShowImage(imgSource)}
+							onClick={() => this.setShowImage(index)}
 							key={imgSource}>
 							<img src={imgSource} alt={productName} width={79} height={80} />
 						</li>

@@ -3,7 +3,7 @@ import styled, { css } from "styled-components"
 
 type StyleProps = Pick<
 	Props,
-	"variant" | "width" | "height" | "isActive" | "disable"
+	"variant" | "width" | "height" | "isActive" | "disabled"
 >
 
 const Outline = css<StyleProps>`
@@ -20,8 +20,9 @@ const Outline = css<StyleProps>`
 	}
 `
 const Contained = css<StyleProps>`
-	background: ${({ theme, disable }) => (!disable ? theme.main.color : "#666")};
-	cursor: ${p => (p.disable ? "default" : "pointer")};
+	background: ${({ theme, disabled }) =>
+		!disabled ? theme.main.color : "#666"};
+	cursor: ${p => (p.disabled ? "default" : "pointer")};
 	border: none;
 	color: #fff;
 	&.color {
@@ -47,7 +48,7 @@ const S = {
 type Props = {
 	children: ReactNode
 	variant: "outline" | "contained"
-	disable?: boolean
+	disabled?: boolean
 	isActive?: boolean
 	className?: string
 	style?: CSSProperties
@@ -62,7 +63,7 @@ class Button extends Component<Props> {
 			children,
 			className,
 			variant,
-			disable,
+			disabled,
 			height,
 			width,
 			isActive,
@@ -71,7 +72,7 @@ class Button extends Component<Props> {
 		} = this.props
 		return (
 			<S.Button
-				disable={disable}
+				disabled={disabled}
 				variant={variant}
 				isActive={isActive}
 				className={className}
