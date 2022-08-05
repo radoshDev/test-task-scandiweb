@@ -16,10 +16,9 @@ const S = {
 			margin-bottom: 103px;
 		}
 		.products {
-			display: flex;
-			justify-content: center;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
 			gap: 103px 40px;
-			flex-wrap: wrap;
 		}
 		.btn_more {
 			width: 140px;

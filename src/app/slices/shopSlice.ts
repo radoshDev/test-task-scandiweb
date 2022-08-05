@@ -40,7 +40,6 @@ const shopSlice = createSlice({
 			} else {
 				state.cart.products.unshift({ options, productId, prices, qty: 1 })
 			}
-			state.cart.isShow = true
 		},
 		updateCartQty: (state, action: PayloadAction<UpdateCartPayload>) => {
 			const { newQty, options, productId } = action.payload

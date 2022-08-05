@@ -18,11 +18,19 @@ type Props = ConnectedProps<typeof connector>
 class NavCart extends Component<Props> {
 	render(): ReactNode {
 		const { isShowCart, cartProductsCount, setIsShowCartModal } = this.props
+
+		const toggleShowModal = (): void => {
+			if (isShowCart) {
+				setIsShowCartModal(false)
+			} else {
+				setIsShowCartModal(true)
+			}
+		}
 		return (
 			<S.NavCart>
 				<NavCartButton
 					cartProductsCount={cartProductsCount}
-					handleOpenCart={() => setIsShowCartModal(true)}
+					toggleShowModal={toggleShowModal}
 				/>
 				{isShowCart && (
 					<CartPopup

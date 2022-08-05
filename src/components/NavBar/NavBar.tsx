@@ -8,14 +8,14 @@ import NavigationLogo from "./NavLogo"
 
 const S = {
 	NavBar: styled.header`
-		padding: 20px 0 5px;
+		padding-top: 23px;
 		display: flex;
 		place-items: center;
 		position: sticky;
 		top: 0;
 		width: 100%;
 		background-color: #fff;
-		z-index: 10;
+		z-index: 15;
 		.navbar__wrapper {
 			display: flex;
 			justify-content: space-between;

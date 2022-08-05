@@ -25,7 +25,6 @@ const S = {
 	CategoryProduct: styled.div<{ inStock: boolean }>`
 		position: relative;
 		padding: 16px;
-		width: 386px;
 		transition: box-shadow 0.3s ease;
 		&:hover {
 			box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
@@ -37,20 +36,35 @@ const S = {
 		&::after {
 			${p => (p.inStock ? "" : cover)}
 		}
-		.image {
-			position: relative;
-			margin-bottom: 24px;
-			img {
-				object-fit: contain;
-			}
-			.out_of_stock_text {
-				color: #8d8f9a;
-				font-size: 24px;
-				text-transform: uppercase;
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
+		.category_product_content {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+
+			.image {
+				position: relative;
+				margin-bottom: 24px;
+				flex: 1;
+				display: flex;
+				img {
+					object-fit: contain;
+
+					width: 100%;
+					max-width: 100%;
+					height: auto;
+					max-height: 330px;
+				}
+				.out_of_stock_text {
+					color: #8d8f9a;
+					font-size: 24px;
+					text-transform: uppercase;
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					width: fit-content;
+					text-align: center;
+				}
 			}
 		}
 		.cart_btn {
@@ -88,11 +102,20 @@ class CategoryProduct extends Component<Props> {
 		} = this.props
 
 		const price = getPriceByCurrency(prices, selectedCurrency?.label)
-		const showAddCart = inStock && attributes.length === 0
 
+		const handleAddProductToCart = (): void => {
+			const options = attributes.reduce(
+				(option, attribute) => ({
+					...option,
+					[attribute.id]: attribute.items[0].id,
+				}),
+				{}
+			)
+			addProductToCart({ options, prices, productId: id })
+		}
 		return (
 			<S.CategoryProduct inStock={inStock}>
-				<Link to={`/product/${id}`}>
+				<Link to={`/product/${id}`} className="category_product_content">
 					<div className="image">
 						<img src={gallery[0]} alt={name + 1} width={354} height={330} />
 						{!inStock && (
@@ -107,11 +130,9 @@ class CategoryProduct extends Component<Props> {
 						{price?.amount}
 					</span>
 				</Link>
-				{showAddCart && (
+				{inStock && (
 					<Button
-						onClick={() =>
-							addProductToCart({ options: {}, prices, productId: id })
-						}
+						onClick={handleAddProductToCart}
 						variant="contained"
 						width="52px"
 						height="52px"

@@ -17,6 +17,7 @@ const S = {
 		font-weight: 500;
 		line-height: 1.6;
 		padding: 20px 0;
+		background-color: #fff;
 		.dropdown_item {
 			padding: 8px 20px;
 			transition: background-color 0.3s ease;

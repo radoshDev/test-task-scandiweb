@@ -8,9 +8,8 @@ const S = {
 		flex-direction: row-reverse;
 		.main_image {
 			img {
-				max-width: 100%;
-				height: auto;
-				/* object-fit: contain; */
+				width: 100%; /*Without it, the product page looks ugly*/
+				object-fit: contain;
 			}
 		}
 		.thumbnails {
@@ -18,11 +17,21 @@ const S = {
 			flex-direction: column;
 			gap: 40px;
 			margin-right: 40px;
+			max-height: 511px;
+			overflow-y: auto;
+			direction: rtl;
+			&::-webkit-scrollbar {
+				width: 0.5rem;
+			}
+			&::-webkit-scrollbar-thumb {
+				background-color: ${p => p.theme.main.color};
+			}
 			.thumbnail_img {
 				display: flex;
 				cursor: pointer;
+				border: 1px solid transparent;
 				&.active {
-					box-shadow: 0 0 0 1px white, 0 0 0 2px ${p => p.theme.main.color};
+					border-color: ${p => p.theme.main.color};
 				}
 				img {
 					object-fit: cover;

@@ -41,16 +41,16 @@ const S = {
 }
 
 type Props = {
-	handleOpenCart: () => void
+	toggleShowModal: () => void
 	cartProductsCount: number
 }
 
 class NavCartButton extends Component<Props> {
 	render(): ReactNode {
-		const { cartProductsCount, handleOpenCart } = this.props
+		const { cartProductsCount, toggleShowModal } = this.props
 
 		return (
-			<S.NavCartButton onClick={handleOpenCart}>
+			<S.NavCartButton onClick={toggleShowModal}>
 				<CartIcon color="#43464E" />
 				{cartProductsCount > 0 && (
 					<span className="badge">{cartProductsCount}</span>
